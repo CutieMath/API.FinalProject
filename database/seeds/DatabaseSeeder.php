@@ -1,5 +1,6 @@
 <?php
 
+use App\Bill;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,6 +12,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
+        //User::truncate();
+        Bill::truncate();
+        $billsQuantity = 50;
+
+        factory(Bill::class, $billsQuantity)->create();
     }
 }

@@ -18,9 +18,15 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+
+// Routes for the simple login and register
 Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
 
 Route::group(['middleware' => 'auth:api'], function(){
 Route::post('details', 'API\UserController@details');
 });
+
+
+// Routes for uploads
+Route::resource('upload_to_genie', 'Bill\BillController', ['except' => ['create', 'edit']]);
