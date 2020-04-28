@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Bill;
 
-use App\Bill;
+use App\Model\Bill;
+use App\Model\Doctor;
+use App\Model\Patient;
+use App\Model\Referral;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -27,20 +30,39 @@ class BillController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'item_numbers' => 'required',
-            'attendant_doctor' => 'required',
-            'date_of_service' => 'required',
-            'location_of_service' => 'required',
-        ];
+        $data = $request->json()->all();
 
-        $this -> validate($request, $rules);
+        // Creating patient object from the request
+        $patient = new Patient($data['patient']['title'], $data['patient']['first_name'], $data['patient']['last_name']);
 
-        $newBill = Bill::create($request->all());
+        // Createing doctor object from the request
+        $attendant_doctor = new Doctor($data['attendant_doctor']['title'], $data['attendant_doctor']['first_name'], $data['attendant_doctor']['last_name']);
+
+        // Creating referral doctor object from the request
+        $referral_doctor = new Doctor($data['referral']['doctor']['title'], $data['referral']['doctor']['first_name'], $data['referral']['doctor']['last_name']);
+
+        // Creating referral object from the request
+        $referral = new Referral($referral_doctor, $data['referral']['length'], $data['referral']['date']);
+
+        // Create bill object object from the request
+        $bill = new Bill($patient, $data['item_numbers'], $attendant_doctor, $referral, $data['date_of_service'], $data['location_of_service'], $data['notes'], $data['status']);
+      
+
+        // $rules = [
+        //     'first_name' => 'required',
+        //     'last_name' => 'required',
+        //     'item_numbers' => 'required',
+        //     'attendant_doctor' => 'required',
+        //     'date_of_service' => 'required',
+        //     'location_of_service' => 'required',
+        // ];
+
+        //$this->validate($request, $rules);
+
+        //$newBill = Bill::create($request->all());
         
-        return response()->json(['data' => $newBill], 201);
+        $response = ['status'=>200, 'msg'=>'Successfully uploaded'];
+        return json_encode($response);
     }
 
     /**
