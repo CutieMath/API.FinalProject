@@ -24,9 +24,10 @@ Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
 
 Route::group(['middleware' => 'auth:api'], function(){
+// See user details
 Route::post('details', 'API\UserController@details');
+// Manage bills
+Route::resource('upload_to_genie', 'Bill\BillController', ['except' => ['create', 'edit']]);
 });
 
 
-// Routes for uploads
-Route::resource('upload_to_genie', 'Bill\BillController', ['except' => ['create', 'edit']]);

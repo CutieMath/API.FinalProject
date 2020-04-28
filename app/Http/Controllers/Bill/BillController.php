@@ -15,8 +15,7 @@ class BillController extends Controller
      */
     public function index()
     {
-        $bills = Bill::all();
-        
+        $bills = Bill::all();  
         return response()->json(['data' => $bills], 200);
     }
 
@@ -33,17 +32,15 @@ class BillController extends Controller
             'last_name' => 'required',
             'item_numbers' => 'required',
             'attendant_doctor' => 'required',
-            'referral' => 'required',
             'date_of_service' => 'required',
             'location_of_service' => 'required',
-            'status' => 'required',
         ];
 
         $this -> validate($request, $rules);
 
         $newBill = Bill::create($request->all());
         
-        return response()->json(['success'=>$success], $this->showOne($newBill, 201));
+        return response()->json(['data' => $newBill], 201);
     }
 
     /**
@@ -52,9 +49,10 @@ class BillController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Bill $bill)
+    public function show($id)
     {
-        return $this->showOne($bill);
+        $bill = Bill::findOrFail($id);
+        return response()->json(['data' => $bill], 200);
     }
 
 
