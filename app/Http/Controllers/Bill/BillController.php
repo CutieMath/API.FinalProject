@@ -44,6 +44,8 @@ class BillController extends ApiController
             'date_of_service' => 'required',
             'location_of_service' => 'required',
         ];
+        // Notes can be empty / Not required
+
 
         // Validate the request
         $this->validate($request, $rules);
