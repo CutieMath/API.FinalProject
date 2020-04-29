@@ -14,9 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 
 
 // Routes for the simple login and register
@@ -24,12 +21,20 @@ Route::post('login', 'User\UserController@login');
 Route::post('register', 'User\UserController@register');
 
 
+
+
 // Routes for operations
 Route::group(['middleware' => 'auth:api'], function(){
+	
+	// Variables for flexible end-point
+	$upload_to_genie = "upload_new_bill";
+
+
 	// See user details
 	Route::post('details', 'User\UserController@details');
 	// Manage bills
-	Route::resource('upload_new_bill', 'Bill\BillController', ['except' => ['create', 'edit']]);
+	Route::resource($upload_to_genie, 'Bill\BillController', ['except' => ['create', 'edit']]);
+
 });
 
 

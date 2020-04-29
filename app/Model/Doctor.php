@@ -11,11 +11,6 @@ class Doctor extends Model
     private $first_name;
     private $last_name;
 
-    // public function __construct()
-    // {
-
-    // }
-
     public function __construct($title, $first_name, $last_name)
     {
     	$this->title = $title;

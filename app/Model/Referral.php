@@ -11,11 +11,6 @@ class Referral extends Model
     private $date;
 
 
-    // public function __construct()
-    // {
-
-    // }
-
     public function __construct($doctor, $length, $date)
     {
         $this->doctor = $doctor;

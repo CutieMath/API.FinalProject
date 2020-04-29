@@ -6,18 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bill extends Model
 {
-    // protected $fillable = [
-    // 	'title',
-    // 	'first_name',
-    // 	'last_name',
-    // 	'item_numbers',
-    // 	'attendant_doctor',
-    // 	'referral',
-    // 	'date_of_service',
-    // 	'location_of_service',
-    // 	'notes',
-    // 	'status',
-    // ];
 
     private $patient;
     private $item_numbers;
@@ -29,11 +17,6 @@ class Bill extends Model
     private $notes;
     private $status;
 
-
-    // public function __construct()
-    // {
-
-    // }
 
     public function __construct($patient, $item_numbers, $attendant_doctor, $referral, $date_of_service, $location_of_service, $notes, $status)
     {

@@ -11,6 +11,9 @@ use App\Http\Controllers\Controller;
 
 class BillController extends Controller
 {
+
+    public $successStatus = 200;
+
     /**
      * Display a listing of the resource.
      *
@@ -45,8 +48,7 @@ class BillController extends Controller
         $referral = new Referral($referral_doctor, $data['referral']['length'], $data['referral']['date']);
 
         // Create bill object object from the request
-        $bill = new Bill($patient, $data['item_numbers'], $attendant_doctor, $referral, $data['date_of_service'], $data['location_of_service'], $data['notes'], $data['status']);
-      
+        $bill = new Bill($patient, $data['item_numbers'], $attendant_doctor, $referral, $data['date_of_service'], $data['location_of_service'], $data['notes'], $data['status']);    
 
         // $rules = [
         //     'first_name' => 'required',
@@ -56,13 +58,10 @@ class BillController extends Controller
         //     'date_of_service' => 'required',
         //     'location_of_service' => 'required',
         // ];
-
-        //$this->validate($request, $rules);
-
-        //$newBill = Bill::create($request->all());
         
-        $response = ['status'=>200, 'msg'=>'Successfully uploaded'];
-        return json_encode($response);
+        $response['message'] = "Successfully uploaded to Genie";
+        return response()->json(['success'=>$response], $this->successStatus);
+
     }
 
     /**
