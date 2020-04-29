@@ -7,9 +7,9 @@ use App\Model\Doctor;
 use App\Model\Patient;
 use App\Model\Referral;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 
-class BillController extends Controller
+class BillController extends ApiController
 {
 
     public $successStatus = 200;
@@ -33,8 +33,24 @@ class BillController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->json()->all();
 
+        // Creating validation rules for json request
+        $rules = [
+            'patient.first_name' => 'required',
+            'patient.last_name' => 'required',
+            'item_numbers' => 'required',
+            'attendant_doctor.first_name' => 'required',
+            'attendant_doctor.last_name' => 'required',
+            'date_of_service' => 'required',
+            'location_of_service' => 'required',
+        ];
+
+        // Validate the request
+        $this->validate($request, $rules);
+        
+        
+        $data = $request->json()->all();
+        
         // Creating patient object from the request
         $patient = new Patient($data['patient']['title'], $data['patient']['first_name'], $data['patient']['last_name']);
 
@@ -50,17 +66,14 @@ class BillController extends Controller
         // Create bill object object from the request
         $bill = new Bill($patient, $data['item_numbers'], $attendant_doctor, $referral, $data['date_of_service'], $data['location_of_service'], $data['notes'], $data['status']);    
 
-        // $rules = [
-        //     'first_name' => 'required',
-        //     'last_name' => 'required',
-        //     'item_numbers' => 'required',
-        //     'attendant_doctor' => 'required',
-        //     'date_of_service' => 'required',
-        //     'location_of_service' => 'required',
-        // ];
+        // Store the Bill object to Genie
+        // To be implemented after connecting to Genie
+
+
         
         $response['message'] = "Successfully uploaded to Genie";
-        return response()->json(['success'=>$response], $this->successStatus);
+        //Generalised response to be implemented
+        return response()->json(['success'=>$response], $this->successStatus); 
 
     }
 
