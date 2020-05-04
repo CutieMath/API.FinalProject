@@ -85,7 +85,6 @@ class BillController extends ApiController
 
         // Store the Claim object to Genie
         // To be implemented after connecting to Genie database
-
         
         $response['message'] = $this->uploadClaimSuccess;   
         return $this->showSuccess($response);     

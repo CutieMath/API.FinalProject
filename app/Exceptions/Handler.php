@@ -4,9 +4,14 @@ namespace App\Exceptions;
 
 use Throwable;
 use App\Traits\ApiResponser;
+use Illuminate\Database\QueryException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -61,14 +66,66 @@ class Handler extends ExceptionHandler
         }
 
         if($exception instanceof ModelNotFoundException){
-            return $this->errorResponse("Specified identifier doesn't exists", 404);
+
+            $modelName = strtolower(class_basename($exception->getModel()));
+            return $this->errorResponse("Specified identifier for {$modelName} doesn't exists", 404);
         }
+
+        if($exception instanceof AuthenticationException){
+            return $this->unauthenticated($request, $exception);
+        }
+
+        if ($exception instanceof AuthorizationException) {
+            return $this->errorResponse($exception->getMessage(), 403);
+        }
+
+        if ($exception instanceof NotFoundHttpException) {
+            return $this->errorResponse("The specified URL is not valid", 404);
+        }
+
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            return $this->errorResponse("The specified method for the request is not valid", 405);
+        }
+
+        if ($exception instanceof HttpException) {
+            return $this->errorResponse($exception->getMessage(), $exception->getStatusCode());
+        }
+
+        if($exception instanceof QueryException){
+            $errorCode = $exception->errorInfo[1];
+
+            if($errorCode == 1451){
+                return $this->errorResponse('Cannot remove this resource, It is related with another resource.', 409);
+            }
+        }
+
+        return $this->errorResponse('Server error, cannot connect to database. Try later', 500);
+
         return parent::render($request, $exception);
+
+
+        // If the application is in debug mode, show error responses in detail
+        // This is commented out for demo purpose
+        // if(config('app.debug')){
+        //     return parent::render($request, $exception);
+        // }
+
     }
 
 
 
-       /**
+    /**
+     * Create a response object from the given validation exception.
+     *
+     */
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+            return $this->errorResponse('Unauthenticated', 401);
+    }
+
+
+
+    /**
      * Create a response object from the given validation exception.
      *
      * @param  \Illuminate\Validation\ValidationException  $e

@@ -35,13 +35,13 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 
 	// Bill
-	Route::resource($upload_to_genie, 'Bill\BillController', ['except' => ['create', 'edit']]);
+	Route::resource($upload_to_genie, 'Bill\BillController', ['only' => ['store']]);
 
 	// User
 	// See current user detail
 	Route::get($details, 'User\UserController@details');
 	// Other methods in user controller
-	Route::resource($users, 'User\UserController', ['except' => ['create', 'edit']]);
+	Route::resource($users, 'User\UserController', ['only' => ['index', 'show']]);
 
 });
 
