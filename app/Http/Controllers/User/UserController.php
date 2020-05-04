@@ -19,7 +19,7 @@ class UserController extends Controller
     	$validator = Validator::make($request->all(),[
     		'first_name' => 'required', 
             'last_name' => 'required', 
-            'email' => 'required|email', 
+            'email' => 'required|email|unique:users', 
             'password' => 'required', 
             'confirm_password' => 'required|same:password', 
     	]);
@@ -37,6 +37,7 @@ class UserController extends Controller
 
     // login api
     public function login(){ 
+        
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')->accessToken; 

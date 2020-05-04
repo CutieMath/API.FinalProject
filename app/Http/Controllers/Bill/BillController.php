@@ -14,6 +14,7 @@ class BillController extends ApiController
 
     public $successStatus = 200;
     public $uploadClaimSuccess = "Successfully uploaded to Genie!";
+    public $deletedSuccess = "Successfully deleted user.";
 
     /**
      * Display a listing of the resource.
@@ -23,7 +24,7 @@ class BillController extends ApiController
     public function index()
     {
         $claims = Bill::all();  
-        return response()->json(['data' => $claims], $successStatus);
+        return response()->json(['data' => $claims], $this->successStatus);
     }
 
     /**
@@ -37,23 +38,23 @@ class BillController extends ApiController
 
         // Creating validation rules for json request
         $rules = [
-            'patient.title' => 'required',
+            'patient.title' => 'required|unique:posts|max:255',
             'patient.first_name' => 'required',
             'patient.last_name' => 'required',
             
             'item_numbers' => 'required',
             
-            'attendant_doctor.title' => 'required',
+            'attendant_doctor.title' => 'required|unique:posts|max:255',
             'attendant_doctor.first_name' => 'required',
             'attendant_doctor.last_name' => 'required',
             
-            'referral.doctor.title' => 'required',
+            'referral.doctor.title' => 'required|unique:posts|max:255',
             'referral.doctor.first_name' => 'required',
             'referral.doctor.last_name' => 'required',
             'referral.length' => 'required',
-            'referral.date' => 'required',
+            'referral.date' => 'required|nullable|date',
 
-            'date_of_service' => 'required',
+            'date_of_service' => 'required|nullable|date',
             'location_of_service' => 'required',
             
             // Notes and status can be empty
@@ -113,9 +114,15 @@ class BillController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Bill $bill)
+    public function update(Request $request, $id)
     {
         
+        $claim = Bill::findOrFail($id);
+
+        // Check with client if any fields are required to be edited
+        if($request -> has('patient.title')){
+            $claim->patient_title = $request->patient_title;
+        }
     }
 
     /**
@@ -124,9 +131,12 @@ class BillController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Bill $bill)
+    public function destroy($id)
     {
-        $bill -> delete();
-        return $this->showOne($bill);
+       $claim = Bill::findOrFail($id);
+       $claim->delete();
+
+       $response['message'] = $this->deletedSuccess . $claim;
+       return response()->json(['success'=> $response], $this->successStatus);
     }
 }
