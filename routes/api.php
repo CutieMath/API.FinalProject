@@ -23,17 +23,25 @@ Route::post('register', 'User\UserController@register');
 
 
 
-// Routes for operations
+// Routes for operations after authenticated
 Route::group(['middleware' => 'auth:api'], function(){
 	
 	// Variables for flexible end-point
+	// Bill controller
 	$upload_to_genie = "upload_new_claim";
+	// User controller
+	$users = "users";
+	$details = "me";
 
 
-	// See user details
-	Route::get('details', 'User\UserController@details');
-	// Manage bills
+	// Bill
 	Route::resource($upload_to_genie, 'Bill\BillController', ['except' => ['create', 'edit']]);
+
+	// User
+	// See current user detail
+	Route::get($details, 'User\UserController@details');
+	// Other methods in user controller
+	Route::resource($users, 'User\UserController', ['except' => ['create', 'edit']]);
 
 });
 

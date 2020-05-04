@@ -83,7 +83,7 @@ class BillController extends ApiController
         // Create bill object object from the request
         $bill = new Bill($patient, $data['item_numbers'], $attendant_doctor, $referral, $data['date_of_service'], $data['location_of_service'], $data['notes'], $data['status']);    
 
-        // Store the Bill object to Genie
+        // Store the Claim object to Genie
         // To be implemented after connecting to Genie database
 
         

@@ -54,11 +54,37 @@ class UserController extends ApiController
         } 
     }
 
+    public function details()
+    {
+        $user = Auth::user();
+        return $this->showOne($user);
+    }
 
-    // show user details 
-    public function details() 
-    { 
-        $user = Auth::user(); 
-        return $this->showOne($user); 
-    } 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        
+        $users = User::all();
+
+        return $this->showAll($users);
+        // return $users;
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(User $user)
+    {
+        return $this->showOne($user);
+    }
+
+
 }
