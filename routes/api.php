@@ -31,7 +31,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 
 	// See user details
-	Route::post('details', 'User\UserController@details');
+	Route::get('details', 'User\UserController@details');
 	// Manage bills
 	Route::resource($upload_to_genie, 'Bill\BillController', ['except' => ['create', 'edit']]);
 
