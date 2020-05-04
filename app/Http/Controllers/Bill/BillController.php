@@ -62,7 +62,6 @@ class BillController extends ApiController
         ];
         
 
-
         // Validate the request
         $this->validate($request, $rules);
         
@@ -88,8 +87,8 @@ class BillController extends ApiController
         // To be implemented after connecting to Genie database
 
         
-        $response['message'] = $this->uploadClaimSuccess;        
-        return response()->json(['success'=>$response], $this->successStatus); 
+        $response['message'] = $this->uploadClaimSuccess;   
+        return $this->showSuccess($response);     
 
     }
 
