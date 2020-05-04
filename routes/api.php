@@ -27,7 +27,7 @@ Route::post('register', 'User\UserController@register');
 Route::group(['middleware' => 'auth:api'], function(){
 	
 	// Variables for flexible end-point
-	$upload_to_genie = "upload_new_bill";
+	$upload_to_genie = "upload_new_claim";
 
 
 	// See user details

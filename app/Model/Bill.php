@@ -17,6 +17,17 @@ class Bill extends Model
     private $notes;
     private $status;
 
+    // protected $fillable = [
+    //     $patient, 
+    //     $item_numbers,
+    //     $attendant_doctor,
+    //     $referral,
+    //     $date_of_service,
+    //     $location_of_service,
+    //     $notes,
+    //     $status,
+    // ];
+
 
     public function __construct($patient, $item_numbers, $attendant_doctor, $referral, $date_of_service, $location_of_service, $notes, $status)
     {
@@ -31,4 +42,5 @@ class Bill extends Model
         $this->status = $status;
     
     }
+
 }

@@ -13,6 +13,7 @@ class BillController extends ApiController
 {
 
     public $successStatus = 200;
+    public $uploadClaimSuccess = "Successfully uploaded to Genie!";
 
     /**
      * Display a listing of the resource.
@@ -21,8 +22,8 @@ class BillController extends ApiController
      */
     public function index()
     {
-        $bills = Bill::all();  
-        return response()->json(['data' => $bills], 200);
+        $claims = Bill::all();  
+        return response()->json(['data' => $claims], $successStatus);
     }
 
     /**
@@ -36,22 +37,37 @@ class BillController extends ApiController
 
         // Creating validation rules for json request
         $rules = [
+            'patient.title' => 'required',
             'patient.first_name' => 'required',
             'patient.last_name' => 'required',
+            
             'item_numbers' => 'required',
+            
+            'attendant_doctor.title' => 'required',
             'attendant_doctor.first_name' => 'required',
             'attendant_doctor.last_name' => 'required',
+            
+            'referral.doctor.title' => 'required',
+            'referral.doctor.first_name' => 'required',
+            'referral.doctor.last_name' => 'required',
+            'referral.length' => 'required',
+            'referral.date' => 'required',
+
             'date_of_service' => 'required',
             'location_of_service' => 'required',
+            
+            // Notes and status can be empty
+            //'notes' => 'required',
+            //'status' => 'required',
         ];
-        // Notes can be empty / Not required
+        
 
 
         // Validate the request
         $this->validate($request, $rules);
         
         
-        $data = $request->json()->all();
+        $data = $request->all();
         
         // Creating patient object from the request
         $patient = new Patient($data['patient']['title'], $data['patient']['first_name'], $data['patient']['last_name']);
@@ -69,12 +85,10 @@ class BillController extends ApiController
         $bill = new Bill($patient, $data['item_numbers'], $attendant_doctor, $referral, $data['date_of_service'], $data['location_of_service'], $data['notes'], $data['status']);    
 
         // Store the Bill object to Genie
-        // To be implemented after connecting to Genie
-
+        // To be implemented after connecting to Genie database
 
         
-        $response['message'] = "Successfully uploaded to Genie";
-        //Generalised response to be implemented
+        $response['message'] = $this->uploadClaimSuccess;        
         return response()->json(['success'=>$response], $this->successStatus); 
 
     }

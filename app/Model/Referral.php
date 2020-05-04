@@ -10,6 +10,12 @@ class Referral extends Model
     private $length;
     private $date;
 
+    // protected $fillable = [
+    //     $doctor,
+    //     $length,
+    //     $date,
+    // ];
+
 
     public function __construct($doctor, $length, $date)
     {
