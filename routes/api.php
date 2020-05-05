@@ -15,11 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-
 // Routes for the simple login and register
 Route::post('login', 'User\UserController@login');
 Route::post('register', 'User\UserController@register');
-
 
 
 

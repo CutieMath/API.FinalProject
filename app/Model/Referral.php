@@ -2,26 +2,33 @@
 
 namespace App\Model;
 
+use App\Model\Doctor;
 use Illuminate\Database\Eloquent\Model;
 
 class Referral extends Model
 {
-    private $doctor;
-    private $length;
-    private $date;
+    // Create referral object
+    // private $doctor;
+    // private $length;
+    // private $date;
 
-    // protected $fillable = [
-    //     $doctor,
-    //     $length,
-    //     $date,
-    // ];
+    // public function __construct($doctor, $length, $date)
+    // {
+    //     $this->doctor = $doctor;
+    //     $this->length = $length;
+    //     $this->date = $date;
+    // }
 
 
-    public function __construct($doctor, $length, $date)
-    {
-        $this->doctor = $doctor;
-        $this->length = $length;
-        $this->date = $date;
-    
+    protected $fillable = [
+        'doctor_id', 
+        'length',
+        'date',
+    ];
+
+    public function doctor(){
+        return $this->hasOne(Doctor::class);
     }
+
+
 }

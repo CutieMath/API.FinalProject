@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use Validator;
-use App\Model\User;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Auth; 
@@ -29,10 +29,11 @@ class UserController extends ApiController
             return $this->errorResponse($error, 401);
         }
 
-
+        // Store data into user table
         $input = $request->all(); 
         $input['password'] = bcrypt($input['password']); 
         $user = User::create($input); 
+       
         $success['message'] =  $user->first_name." has been successfully registered";
 		return $this->showSuccess($success); 
     }
@@ -54,11 +55,13 @@ class UserController extends ApiController
         } 
     }
 
+
     public function details()
     {
         $user = Auth::user();
         return $this->showOne($user);
     }
+
 
     /**
      * Display a listing of the resource.
@@ -73,6 +76,7 @@ class UserController extends ApiController
         return $this->showAll($users);
         // return $users;
     }
+
 
 
     /**

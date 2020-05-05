@@ -14,8 +14,15 @@ class CreateReferralsTable extends Migration
     public function up()
     {
         Schema::create('referrals', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+
+             // Foreign key
+            $table->bigInteger('doctor_id')->unsigned();
+            $table->foreign('doctor_id')->references('id')->on('doctors');
+            $table->string('length');
+            $table->string('date');
             $table->timestamps();
+
         });
     }
 

@@ -2,8 +2,11 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Bill;
 use App\User;
+use App\Model\Bill;
+use App\Model\Doctor;
+use App\Model\Patient;
+use App\Model\Referral;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
@@ -18,7 +21,11 @@ use Faker\Generator as Faker;
 |
 */
 
+
+// User
 $factory->define(User::class, function (Faker $faker) {
+    static $password;
+    
     return [
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
@@ -30,17 +37,54 @@ $factory->define(User::class, function (Faker $faker) {
 });
 
 
+
+// Claim
 $factory->define(Bill::class, function (Faker $faker) {
+    
     return [
-    	'title' => $faker->title,
-        'first_name' => $faker->firstName,
-        'last_name' => $faker->lastName,
+
+        'patient_id' => Patient::all()->random()->id,
         'item_numbers' => $faker->randomElement(['12', '123', '456']),
-        'attendant_doctor' => $faker->name,
-        'referral' => $faker->name,
+        'doctor_id' => Doctor::all()->random()->id, 
+        'referral_id' => Referral::all()->random()->id,
         'date_of_service' => $faker->date($format = 'Y-m-d', $max = 'now'),
         'location_of_service' => $faker->address,
 		'notes' => $faker -> paragraph(1),
 		'status' => $faker -> emoji,      
     ];
 });
+
+
+// Doctor
+$factory->define(Doctor::class, function(Faker $faker){
+
+    return [
+        'title' => $faker->title, 
+        'first_name' => $faker->firstName, 
+        'last_name' => $faker->lastName,
+    ];
+
+});
+
+
+// Patient
+$factory->define(Patient::class, function(Faker $faker){
+    return [
+        'title' => $faker->title, 
+        'first_name' => $faker->firstName, 
+        'last_name' => $faker->lastName,
+    ];
+});
+
+
+// Referral
+$factory->define(Referral::class, function(Faker $faker){
+
+    return [
+        'doctor_id' => Doctor::all()->random()->id,
+        'length' => $faker->randomDigit().' months',
+        'date' => $faker->date($format = 'Y-m-d', $max = 'now'),
+    ];
+
+});
+
