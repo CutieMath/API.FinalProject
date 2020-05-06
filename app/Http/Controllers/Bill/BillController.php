@@ -32,7 +32,7 @@ class BillController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Patient $patient, Doctor $doctor, Referral $referral)
     {
 
         // Creating validation rules for json request
@@ -62,33 +62,46 @@ class BillController extends ApiController
         ];
         
 
+
         // Validate the request
         $this->validate($request, $rules);
-        
-        
-        $data = $request->all();
-        
-        // Creating patient object from the request
-        $patient = new Patient($data['patient']['title'], $data['patient']['first_name'], $data['patient']['last_name']);
 
-        // Createing doctor object from the request
-        $attendant_doctor = new Doctor($data['attendant_doctor']['title'], $data['attendant_doctor']['first_name'], $data['attendant_doctor']['last_name']);
+        // insert into patient table
+        $data = $request->input('patient');
+        Patient::create($data);
 
-        // Creating referral doctor object from the request
-        $referral_doctor = new Doctor($data['referral']['doctor']['title'], $data['referral']['doctor']['first_name'], $data['referral']['doctor']['last_name']);
+        // insert into doctor table
+        $data = $request->input('attendant_doctor');
+        Doctor::create($data);
 
-        // Creating referral object from the request
-        $referral = new Referral($referral_doctor, $data['referral']['length'], $data['referral']['date']);
+        // insert into referral table
+        $data = $request->input('referral.doctor');
+        Doctor::create($data);
 
-        // Create bill object object from the request
-        $bill = new Bill($patient, $data['item_numbers'], $attendant_doctor, $referral, $data['date_of_service'], $data['location_of_service'], $data['notes'], $data['status']);    
-
-        // Store the Claim object to Genie
-        // To be implemented after connecting to Genie database
-
+        //$data = $request->input('referral');
+        //Referral::create($data);
 
         
         
+        // // Creating patient object from the request
+        // $patient = new Patient($data['patient']['title'], $data['patient']['first_name'], $data['patient']['last_name']);
+
+        // // Createing doctor object from the request
+        // $attendant_doctor = new Doctor($data['attendant_doctor']['title'], $data['attendant_doctor']['first_name'], $data['attendant_doctor']['last_name']);
+
+        // // Creating referral doctor object from the request
+        // $referral_doctor = new Doctor($data['referral']['doctor']['title'], $data['referral']['doctor']['first_name'], $data['referral']['doctor']['last_name']);
+
+        // // Creating referral object from the request
+        // $referral = new Referral($referral_doctor, $data['referral']['length'], $data['referral']['date']);
+
+        // // Create bill object object from the request
+        // $bill = new Bill($patient, $data['item_numbers'], $attendant_doctor, $referral, $data['date_of_service'], $data['location_of_service'], $data['notes'], $data['status']);    
+
+        // // Store the Claim object to Genie
+        // // To be implemented after connecting to Genie database
+
+
         $response['message'] = $this->uploadClaimSuccess;   
         return $this->showSuccess($response);     
 
