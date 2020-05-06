@@ -67,39 +67,19 @@ class BillController extends ApiController
         $this->validate($request, $rules);
 
         // insert into patient table
-        $data = $request->input('patient');
-        Patient::create($data);
+        $patientData = $request->input('patient');
+        Patient::create($patientData);
 
         // insert into doctor table
-        $data = $request->input('attendant_doctor');
-        Doctor::create($data);
+        $doctorData = $request->input('attendant_doctor');
+        Doctor::create($doctorData);
 
         // insert into referral table
-        $data = $request->input('referral.doctor');
-        Doctor::create($data);
+        $referralDoctorData = $request->input('referral.doctor');
+        Doctor::create($referralDoctorData);
 
         //$data = $request->input('referral');
         //Referral::create($data);
-
-        
-        
-        // // Creating patient object from the request
-        // $patient = new Patient($data['patient']['title'], $data['patient']['first_name'], $data['patient']['last_name']);
-
-        // // Createing doctor object from the request
-        // $attendant_doctor = new Doctor($data['attendant_doctor']['title'], $data['attendant_doctor']['first_name'], $data['attendant_doctor']['last_name']);
-
-        // // Creating referral doctor object from the request
-        // $referral_doctor = new Doctor($data['referral']['doctor']['title'], $data['referral']['doctor']['first_name'], $data['referral']['doctor']['last_name']);
-
-        // // Creating referral object from the request
-        // $referral = new Referral($referral_doctor, $data['referral']['length'], $data['referral']['date']);
-
-        // // Create bill object object from the request
-        // $bill = new Bill($patient, $data['item_numbers'], $attendant_doctor, $referral, $data['date_of_service'], $data['location_of_service'], $data['notes'], $data['status']);    
-
-        // // Store the Claim object to Genie
-        // // To be implemented after connecting to Genie database
 
 
         $response['message'] = $this->uploadClaimSuccess;   

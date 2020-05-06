@@ -99,13 +99,13 @@ class Handler extends ExceptionHandler
             }
         }
 
-        //return $this->errorResponse('Server error, cannot connect to database. Try later', 500);
+        return $this->errorResponse('Server error, cannot connect to database. Try later', 500);
 
-        // If the application is in debug mode, show error responses in detail
-        // This is commented out for demo purpose
-        if(config('app.debug')){
-            return parent::render($request, $exception);
-        }
+        // // If the application is in debug mode, show error responses in detail
+        // // This is commented out for demo purpose
+        // if(config('app.debug')){
+        //     return parent::render($request, $exception);
+        // }
 
          return parent::render($request, $exception);
 
