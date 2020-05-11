@@ -32,7 +32,7 @@ class BillController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Patient $patient, Doctor $doctor, Referral $referral)
+    public function store(Request $request)
     {
 
         // Creating validation rules for json request
@@ -51,9 +51,9 @@ class BillController extends ApiController
             'referral.doctor.first_name' => 'required',
             'referral.doctor.last_name' => 'required',
             'referral.length' => 'required',
-            'referral.date' => 'required',
+            'referral.date' => 'required|date_format:d/m/Y',
 
-            'date_of_service' => 'required',
+            'date_of_service' => 'required|date_format:d/m/Y',
             'location_of_service' => 'required',
             
             // Notes and status can be empty
@@ -67,16 +67,16 @@ class BillController extends ApiController
         $this->validate($request, $rules);
 
         // insert into patient table
-        $patientData = $request->input('patient');
-        Patient::create($patientData);
+        //$patientData = $request->input('patient');
+        //Patient::create($patientData);
 
-        // insert into doctor table
-        $doctorData = $request->input('attendant_doctor');
-        Doctor::create($doctorData);
+        // Find the doctor based on the request
+        //$doctorData = $request->input('attendant_doctor');
+        //Doctor::create($doctorData);
 
         // insert into referral table
-        $referralDoctorData = $request->input('referral.doctor');
-        Doctor::create($referralDoctorData);
+        //$referralDoctorData = $request->input('referral.doctor');
+        //Doctor::create($referralDoctorData);
 
         //$data = $request->input('referral');
         //Referral::create($data);

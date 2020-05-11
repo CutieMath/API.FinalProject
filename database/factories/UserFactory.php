@@ -47,7 +47,7 @@ $factory->define(Bill::class, function (Faker $faker) {
         'item_numbers' => $faker->randomElement(['12', '123', '456']),
         'doctor_id' => Doctor::all()->random()->id, 
         'referral_id' => Referral::all()->random()->id,
-        'date_of_service' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        'date_of_service' => $faker->date($format = 'd/m/Y', $max = 'now'),
         'location_of_service' => $faker->address,
 		'notes' => $faker -> paragraph(1),
 		'status' => $faker -> emoji,      
@@ -83,7 +83,7 @@ $factory->define(Referral::class, function(Faker $faker){
     return [
         'doctor_id' => Doctor::all()->random()->id,
         'length' => $faker->randomDigit().' months',
-        'date' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        'date' => $faker->date($format = 'd/m/Y', $max = 'now'),
     ];
 
 });
