@@ -62,29 +62,52 @@ class BillController extends ApiController
         ];
         
 
-
         // Validate the request
         $this->validate($request, $rules);
 
         // insert into patient table
-        //$patientData = $request->input('patient');
-        //Patient::create($patientData);
+        $patientData = $request->input('patient');
+        Patient::create($patientData);
+ 
+        // Find the attendant doctor id based on the request
 
-        // Find the doctor based on the request
-        //$doctorData = $request->input('attendant_doctor');
-        //Doctor::create($doctorData);
 
-        // insert into referral table
-        //$referralDoctorData = $request->input('referral.doctor');
-        //Doctor::create($referralDoctorData);
+        // Find the referral doctor id based on the request
 
-        //$data = $request->input('referral');
-        //Referral::create($data);
+
+        // Insert required data into claim table 
+        Bill::create([
+            'patient_id' => $request->input('patient.first_name'),
+            'doctor_id' => $request->input('attendant_doctor.first_name'),
+            'referral_id' => $request->input('referral.doctor.first_name'),
+            'item_numbers' => $request->input('item_numbers'), 
+            'date_of_service' => $request->input('date_of_service'),
+            'location_of_service' => $request->input('location_of_service'),
+            'notes' => $request-> input('notes'),
+            'status' => $request-> input('status'),
+        ]);
 
 
         $response['message'] = $this->uploadClaimSuccess;   
         return $this->showSuccess($response);     
 
+    }
+
+    public function find(Request $request, Doctor $doctor)
+    {
+        $doctor = $request->input('attendant_doctor');
+
+        // Search for a doctor based on their title + first name + last name
+        if($request->has('attendant_doctor.title')){
+            $doctor->where('title', $request->input('doctor.title'));
+        }
+        if($request->has('attendant_doctor.first_name')){
+            $doctor->where('first_name', $request->input('doctor.first_name'));
+        }
+        if($request->has('attendant_doctor.last_name')){
+            $doctor->where('last_name', $request->input('doctor.last_name'));
+        }
+        return $doctor->get();
     }
 
     /**
