@@ -66,24 +66,34 @@ class BillController extends ApiController
         // Validate the request
         $this->validate($request, $rules);
 
-        // insert data into patient table
+        // insert data into 'patients' table
         $patientData = $request->input('patient');
         Patient::create($patientData);
         
-        // Get the id of the patient and insert into claim table
+        // Get the id of the patient and insert into 'bills' table
         $patientFirstName = $request->input('patient.first_name');
         $patientId = DB::table('patients')->where('first_name', $patientFirstName)->value('id');
  
-        // Find the attendant doctor id from the request
+        // Find the attendant doctor's id from the request
         $doctorFirstName = $request->input('attendant_doctor.first_name');
         $doctorId = DB::table('doctors')->where('first_name', $doctorFirstName)->value('id');
 
 
-        // Find the referral doctor id from on the request
-        // Note all doctors are stored in doctor table
-        // Referral table contains a foreign key with the doctor id
+        // Find the referral doctor's id from the request
+        // Note that all doctors are stored in 'doctors' table
+        // 'referrals' table contains a foreign key with the doctor id
         $referralFirstName = $request->input('referral.doctor.first_name');
-        $referralId = DB::table('doctors')->where('first_name', $referralFirstName)->value('id');
+        $referralDocId = DB::table('doctors')->where('first_name', $referralFirstName)->value('id');
+
+
+        // Insert referral doctor id and required information into referral table
+        // get the referral id
+        Referral::create([
+            'doctor_id'=> $referralDocId,
+            'length'=> $request->input('referral.length'),
+            'date'=> $request->input('referral.date')
+        ]);
+        $referralId = DB::table('referrals')->where('doctor_id', $referralDocId)->value('id');
 
 
         // Insert required data into claim table 
@@ -99,7 +109,7 @@ class BillController extends ApiController
         ]);
 
 
-        $response['message'] = $this->uploadClaimSuccess.$patientId.', '.$doctorId.', '.'and '.$referralId.' respectively';   
+        $response['message'] = $this->uploadClaimSuccess.$patientId.', '.$doctorId.', '.'and '.$referralDocId.' respectively';  
         return $this->showSuccess($response);     
 
     }
