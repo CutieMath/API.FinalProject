@@ -18,18 +18,15 @@ class CreateBillsTable extends Migration
             $table->bigIncrements('id');
             
             //Foreign Key (patients)
-            $table->string('patient_id');
-            //$table->foreign('patient_id')->references('id')->on('patients');
+            $table->bigInteger('patient_id')->unsigned();
             
             $table->string('item_numbers');
             
             //Foreign Key (doctors)
-            $table->string('doctor_id');
-            //$table->foreign('doctor_id')->references('id')->on('doctors');
+            $table->bigInteger('doctor_id')->unsigned();
             
             // Foreign Key (Referrals)
-            $table->string('referral_id');
-            //$table->foreign('referral_id')->references('id')->on('referrals');
+            $table->bigInteger('referral_id')->unsigned();
 
             $table->string('date_of_service');
             $table->string('location_of_service');

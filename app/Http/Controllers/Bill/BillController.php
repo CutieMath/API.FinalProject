@@ -7,13 +7,14 @@ use App\Model\Doctor;
 use App\Model\Patient;
 use App\Model\Referral;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ApiController;
 
 class BillController extends ApiController
 {
 
     public $successStatus = 200;
-    public $uploadClaimSuccess = "Successfully uploaded to Genie!";
+    public $uploadClaimSuccess = "Successfully uploaded to Genie!"." Patient, doctor and referral doctor's ID are: ";
 
     /**
      * Display a listing of the resource.
@@ -65,21 +66,31 @@ class BillController extends ApiController
         // Validate the request
         $this->validate($request, $rules);
 
-        // insert into patient table
+        // insert data into patient table
         $patientData = $request->input('patient');
         Patient::create($patientData);
+        
+        // Get the id of the patient and insert into claim table
+        $patientFirstName = $request->input('patient.first_name');
+        $patientId = DB::table('patients')->where('first_name', $patientFirstName)->value('id');
  
-        // Find the attendant doctor id based on the request
+        // Find the attendant doctor id from the request
+        $doctorFirstName = $request->input('attendant_doctor.first_name');
+        $doctorId = DB::table('doctors')->where('first_name', $doctorFirstName)->value('id');
 
 
-        // Find the referral doctor id based on the request
+        // Find the referral doctor id from on the request
+        // Note all doctors are stored in doctor table
+        // Referral table contains a foreign key with the doctor id
+        $referralFirstName = $request->input('referral.doctor.first_name');
+        $referralId = DB::table('doctors')->where('first_name', $referralFirstName)->value('id');
 
 
         // Insert required data into claim table 
         Bill::create([
-            'patient_id' => $request->input('patient.first_name'),
-            'doctor_id' => $request->input('attendant_doctor.first_name'),
-            'referral_id' => $request->input('referral.doctor.first_name'),
+            'patient_id' => $patientId,
+            'doctor_id' => $doctorId,
+            'referral_id' => $referralId,
             'item_numbers' => $request->input('item_numbers'), 
             'date_of_service' => $request->input('date_of_service'),
             'location_of_service' => $request->input('location_of_service'),
@@ -88,27 +99,11 @@ class BillController extends ApiController
         ]);
 
 
-        $response['message'] = $this->uploadClaimSuccess;   
+        $response['message'] = $this->uploadClaimSuccess.$patientId.', '.$doctorId.', '.'and '.$referralId.' respectively';   
         return $this->showSuccess($response);     
 
     }
 
-    public function find(Request $request, Doctor $doctor)
-    {
-        $doctor = $request->input('attendant_doctor');
-
-        // Search for a doctor based on their title + first name + last name
-        if($request->has('attendant_doctor.title')){
-            $doctor->where('title', $request->input('doctor.title'));
-        }
-        if($request->has('attendant_doctor.first_name')){
-            $doctor->where('first_name', $request->input('doctor.first_name'));
-        }
-        if($request->has('attendant_doctor.last_name')){
-            $doctor->where('last_name', $request->input('doctor.last_name'));
-        }
-        return $doctor->get();
-    }
 
     /**
      * Display the specified resource.
