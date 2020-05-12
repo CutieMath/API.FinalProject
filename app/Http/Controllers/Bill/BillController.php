@@ -72,18 +72,30 @@ class BillController extends ApiController
         
         // Get the id of the patient and insert into 'bills' table
         $patientFirstName = $request->input('patient.first_name');
-        $patientId = DB::table('patients')->where('first_name', $patientFirstName)->value('id');
+        $patientLastName = $request->input('patient.last_name');
+        $patientId = DB::table('patients')->where([
+            ['first_name', '=', $patientFirstName],
+            ['last_name', '=', $patientLastName],
+        ])->value('id');
  
         // Find the attendant doctor's id from the request
         $doctorFirstName = $request->input('attendant_doctor.first_name');
-        $doctorId = DB::table('doctors')->where('first_name', $doctorFirstName)->value('id');
+        $doctorLastName = $request->input('attendant_doctor.last_name');
+        $doctorId = DB::table('doctors')->where([
+            ['first_name', '=', $doctorFirstName],
+            ['last_name', '=', $doctorLastName],
+        ])->value('id');
 
 
         // Find the referral doctor's id from the request
         // Note that all doctors are stored in 'doctors' table
         // 'referrals' table contains a foreign key with the doctor id
         $referralFirstName = $request->input('referral.doctor.first_name');
-        $referralDocId = DB::table('doctors')->where('first_name', $referralFirstName)->value('id');
+        $referralLastName = $request->input('referral.doctor.last_name');
+        $referralDocId = DB::table('doctors')->where([
+            ['first_name', '=', $referralFirstName],
+            ['last_name', '=', $referralLastName],
+        ])->value('id');
 
 
         // Insert referral doctor id and required information into referral table
