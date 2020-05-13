@@ -92,23 +92,25 @@ class Handler extends ExceptionHandler
         }
 
         if($exception instanceof QueryException){
+            
             $errorCode = $exception->errorInfo[1];
 
             if($errorCode == 1451){
                 return $this->errorResponse('Cannot remove this resource, It is related with another resource.', 409);
             }
+
+            if($errorCode == 1048){
+                return $this->errorResponse('Cannot find doctor or referral doctor records in the databse, please check spelling.', 406);
+            }
         }
 
-        //return $this->errorResponse('Server error, cannot connect to database. Try later', 500);
+        // comment out this line if a more specific error message is needed
+        return $this->errorResponse('Unexpected Exception, Try Later', 500);
 
         // If the application is in debug mode, show error responses in detail
-        // This is commented out for demo purpose
         if(config('app.debug')){
             return parent::render($request, $exception);
         }
-
-         return parent::render($request, $exception);
-
     }
 
 
