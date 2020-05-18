@@ -100,12 +100,12 @@ class Handler extends ExceptionHandler
             }
 
             if($errorCode == 1048){
-                return $this->errorResponse('Cannot find doctor or referral doctor records in the databse, please check spelling.', 406);
+                return $this->errorResponse('Contraint violation. Null value was inserted into required column', 406);
             }
         }
 
         // comment out this line if a more specific error message is needed
-        return $this->errorResponse('Unexpected Exception, Try Later', 500);
+        //return $this->errorResponse('Unexpected Exception, Try Later', 500);
 
         // If the application is in debug mode, show error responses in detail
         if(config('app.debug')){

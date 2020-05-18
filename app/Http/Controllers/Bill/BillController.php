@@ -64,31 +64,20 @@ class BillController extends ApiController
         
 
         // Validate the request
-        $this->validate($request, $rules);
+        $this->validate($request, $rules);       
 
-        // insert data into 'patients' table
-        $patientData = $request->input('patient');
-        Patient::create($patientData);
-        
-        // Get the id of the patient and insert into 'bills' table
-        $patientTitle = $request->input('patient.title');
-        $patientFirstName = $request->input('patient.first_name');
-        $patientLastName = $request->input('patient.last_name');
-        $patientId = DB::table('patients')->where([
-            ['title', '=', $patientTitle],
-            ['first_name', '=', $patientFirstName],
-            ['last_name', '=', $patientLastName],
-        ])->value('id');
  
         // Find the attendant doctor's id from the request
         $doctorTitle = $request->input('attendant_doctor.title');
         $doctorFirstName = $request->input('attendant_doctor.first_name');
         $doctorLastName = $request->input('attendant_doctor.last_name');
-        $doctorId = DB::table('doctors')->where([
+        
+        $doctorExist = DB::table('doctors')->where([
             ['title', '=', $doctorTitle],
             ['first_name', '=', $doctorFirstName],
             ['last_name', '=', $doctorLastName],
-        ])->value('id');
+        ])->exists();
+
 
 
         // Find the referral doctor's id from the request
@@ -97,37 +86,75 @@ class BillController extends ApiController
         $referralTitle = $request->input('referral.doctor.title');
         $referralFirstName = $request->input('referral.doctor.first_name');
         $referralLastName = $request->input('referral.doctor.last_name');
-        $referralDocId = DB::table('doctors')->where([
-            ['title', '=', $referralTitle],
-            ['first_name', '=', $referralFirstName],
-            ['last_name', '=', $referralLastName],
-        ])->value('id');
+
+        $referralDoctorExist = DB::table('doctors')->where([
+            ['title', '=', $doctorTitle],
+            ['first_name', '=', $doctorFirstName],
+            ['last_name', '=', $doctorLastName],
+        ])->exists();
+        
+
+        if($doctorExist == true && $referralDoctorExist == true){
+
+                // Get patient data & insert into table
+                $patientData = $request->input('patient');
+                Patient::create($patientData);
+
+                // Get the id of the patient
+                $patientTitle = $request->input('patient.title');
+                $patientFirstName = $request->input('patient.first_name');
+                $patientLastName = $request->input('patient.last_name');
+                $patientId = DB::table('patients')->where([
+                    ['title', '=', $patientTitle],
+                    ['first_name', '=', $patientFirstName],
+                    ['last_name', '=', $patientLastName],
+                ])->value('id');
 
 
-        // Insert referral doctor id and required information into referral table
-        // get the referral id
-        Referral::create([
-            'doctor_id'=> $referralDocId,
-            'length'=> $request->input('referral.length'),
-            'date'=> $request->input('referral.date')
-        ]);
-        $referralId = DB::table('referrals')->where('doctor_id', $referralDocId)->value('id');
+                // get the doctor id
+                $doctorId = DB::table('doctors')->where([
+                    ['title', '=', $doctorTitle],
+                    ['first_name', '=', $doctorFirstName],
+                    ['last_name', '=', $doctorLastName],
+                ])->value('id');
 
 
-        // Insert required data into claim table 
-        Bill::create([
-            'patient_id' => $patientId,
-            'doctor_id' => $doctorId,
-            'referral_id' => $referralId,
-            'item_numbers' => $request->input('item_numbers'), 
-            'date_of_service' => $request->input('date_of_service'),
-            'location_of_service' => $request->input('location_of_service'),
-            'notes' => $request-> input('notes'),
-            'status' => $request-> input('status'),
-        ]);
+                // get the doctor id for referrals 
+                $referralDocId = DB::table('doctors')->where([
+                    ['title', '=', $referralTitle],
+                    ['first_name', '=', $referralFirstName],
+                    ['last_name', '=', $referralLastName],
+                ])->value('id');
 
 
-        $response['message'] = $this->uploadClaimSuccess.$patientId.', '.$doctorId.', '.'and '.$referralDocId.' respectively';  
+                // Insert referral doctor id and required information into referral table
+                // get the referral id
+                Referral::create([
+                    'doctor_id'=> $referralDocId,
+                    'length'=> $request->input('referral.length'),
+                    'date'=> $request->input('referral.date')
+                ]);
+                $referralId = DB::table('referrals')->where('doctor_id', $referralDocId)->value('id');
+
+
+                // Insert required data into claim table 
+                Bill::create([
+                    'patient_id' => $patientId,
+                    'doctor_id' => $doctorId,
+                    'referral_id' => $referralId,
+                    'item_numbers' => $request->input('item_numbers'), 
+                    'date_of_service' => $request->input('date_of_service'),
+                    'location_of_service' => $request->input('location_of_service'),
+                    'notes' => $request-> input('notes'),
+                    'status' => $request-> input('status'),
+                ]);
+
+        }else{
+            return $this->errorResponse("Cannot find doctor or referral doctor records in the databse. Please check spelling.", 400);
+        }
+
+
+        $response['message'] = $this->uploadClaimSuccess;  
         return $this->showSuccess($response);     
 
     }
