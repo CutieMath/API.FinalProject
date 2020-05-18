@@ -73,6 +73,15 @@ $factory->define(Patient::class, function(Faker $faker){
         'title' => $faker->title, 
         'first_name' => $faker->firstName, 
         'last_name' => $faker->lastName,
+        'Middle' => $faker->lastName,
+        'DOB' => $faker->date($format = 'd/m/Y', $max = 'now'),
+        'Chart No' => $faker->randomDigit(),
+        'Mobile Phone' => $faker->phoneNumber,
+        'Usual Provider' => $faker->name,
+        'Last Seen' => $faker->date($format = 'd/m/Y', $max = 'now'),
+        'Last Seen By' => $faker->name,
+        'Acct Id' => $faker->unixTime($max = 'now'),
+        'Balance' => $faker->numberBetween($min = 0, $max = 2000),
     ];
 });
 

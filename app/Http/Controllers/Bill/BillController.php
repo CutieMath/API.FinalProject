@@ -14,7 +14,7 @@ class BillController extends ApiController
 {
 
     public $successStatus = 200;
-    public $uploadClaimSuccess = "Successfully uploaded to Genie!"." Patient, doctor and referral doctor's ID are: ";
+    public $uploadClaimSuccess = "Successfully uploaded to Genie!";
 
     /**
      * Display a listing of the resource.
@@ -101,11 +101,9 @@ class BillController extends ApiController
                 Patient::create($patientData);
 
                 // Get the id of the patient
-                $patientTitle = $request->input('patient.title');
                 $patientFirstName = $request->input('patient.first_name');
                 $patientLastName = $request->input('patient.last_name');
                 $patientId = DB::table('patients')->where([
-                    ['title', '=', $patientTitle],
                     ['first_name', '=', $patientFirstName],
                     ['last_name', '=', $patientLastName],
                 ])->value('id');
@@ -152,7 +150,6 @@ class BillController extends ApiController
         }else{
             return $this->errorResponse("Cannot find doctor or referral doctor records in the databse. Please check spelling.", 400);
         }
-
 
         $response['message'] = $this->uploadClaimSuccess;  
         return $this->showSuccess($response);     
