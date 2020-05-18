@@ -62,6 +62,16 @@ $factory->define(Doctor::class, function(Faker $faker){
         'title' => $faker->title, 
         'first_name' => $faker->firstName, 
         'last_name' => $faker->lastName,
+        'Clinic' => $faker->bs,
+        'Suburb' => $faker->city,
+        'Specialty' => $faker->randomElement($array = array('General Medical Practitioner', 'Surgeon (General)', 'Anaesthetist'), $count = 1),
+        'Phone' => $faker->phoneNumber,
+        'Fax' => $faker->tollFreePhoneNumber, 
+        'Mobile' => $faker->e164PhoneNumber,
+        'Prov No' => $faker->bothify('####??'),
+        'Email'=> $faker->companyEmail,
+        'Healthlink' => $faker->company,
+        'Prefers'=> $faker->catchPhrase,
     ];
 
 });

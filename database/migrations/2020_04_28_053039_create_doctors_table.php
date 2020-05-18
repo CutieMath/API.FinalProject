@@ -18,6 +18,16 @@ class CreateDoctorsTable extends Migration
             $table->string('title');
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('Clinic')->nullable();
+            $table->string('Suburb')->nullable();
+            $table->string('Specialty')->nullable();
+            $table->string('Phone')->nullable();
+            $table->string('Fax')->nullable();
+            $table->string('Mobile')->nullable();
+            $table->string('Prov No')->nullable();
+            $table->string('Email')->nullable();
+            $table->string('Healthlink')->nullable();
+            $table->string('Prefers')->nullable();
             $table->timestamps();
         });
     }
