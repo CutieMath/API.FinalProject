@@ -88,13 +88,13 @@ class BillController extends ApiController
         $referralLastName = $request->input('referral.doctor.last_name');
 
         $referralDoctorExist = DB::table('doctors')->where([
-            ['title', '=', $doctorTitle],
-            ['first_name', '=', $doctorFirstName],
-            ['last_name', '=', $doctorLastName],
+            ['title', '=', $referralTitle],
+            ['first_name', '=', $referralFirstName],
+            ['last_name', '=', $referralLastName],
         ])->exists();
         
 
-        if($doctorExist == true && $referralDoctorExist == true){
+        if($doctorExist == true AND $referralDoctorExist == true){
 
                 // Get patient data & insert into table
                 $patientData = $request->input('patient');
