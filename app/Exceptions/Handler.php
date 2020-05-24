@@ -105,7 +105,7 @@ class Handler extends ExceptionHandler
         }
 
         // comment out this line if a more specific error message is needed
-        //return $this->errorResponse('Unexpected Exception, Try Later', 500);
+        // return $this->errorResponse('Unexpected Exception, Try Later', 500);
 
         // If the application is in debug mode, show error responses in detail
         if(config('app.debug')){
