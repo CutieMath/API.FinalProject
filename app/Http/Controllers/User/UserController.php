@@ -40,11 +40,21 @@ class UserController extends ApiController
 
 
     // login api
-    public function login(){ 
+    public function login(Request $request){ 
 
+        // Validate requests
+        $validator = Validator::make($request->all(),[
+            'email' => 'required|email', 
+            'password' => 'required', 
+        ]);
+        $error['message'] = $validator->errors();
+        if ($validator->fails()) { 
+            return $this->errorResponse($error, 401);
+        }
+
+        // Store data
         if(Auth::attempt(['email' => request('email'), 
-                          'password' => request('password')]))
-        { 
+                          'password' => request('password')])){ 
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')->accessToken; 
             return $this->showSuccess($success); 
