@@ -1,4 +1,4 @@
-##API project
+## API project
 This is my 2020 Semester One project using Laravel Framework<br>
 The program will generate databases for a theoretical orgainisation. <br>
 An authorised party can use the endpoints provided by this program to read/write the database. 
