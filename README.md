@@ -8,7 +8,7 @@ This API performs read/write to a database based on client request.
 - Referral
 - Claims
 2. A third party user can use provided endpoint to login and register to the API. Token authentication was used.
-3. Successfully registered user can perform sofisticated read/write operations to manipulate the database as required.
+3. Successfully registered user can perform sophisticated read/write operations to manipulate the database as required.
 
 <p>Deployed API documentation can be found at <a href="https://documenter.getpostman.com/view/10828313/SzmmUaBJ?version=latest">postman documentation</a>. <br>After June 2020, a new domain and hosting enviroment will be required to operate the API.</p>
 
