@@ -1,6 +1,6 @@
 ## API project
 
-<p>This API perform read/write to a database based on clients request.</p>
+This API perform read/write to a database based on client request.
 1. The API will first generate the following databases for a theoretical orgainisation:
 - Users
 - Doctors
@@ -10,9 +10,9 @@
 2. A third party user can use provided endpoint to login and register to the API. Token authentication was used.<br>
 3. Successfully registered user can perform sofisticated read/write operations to manipulate the database as required.<br>
 
-<p>Deployed API documentation can be found at <a href="https://documenter.getpostman.com/view/10828313/SzmmUaBJ?version=latest">postman documentation</a>. After June 2020, a new domain and hosting enviroment will be required to operate the API.</p>
+<p>Deployed API documentation can be found at <a href="https://documenter.getpostman.com/view/10828313/SzmmUaBJ?version=latest">postman documentation</a>. <br>After June 2020, a new domain and hosting enviroment will be required to operate the API.</p>
 
-## The API used Laravel framework
+## Framework
 
 
 <p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
