@@ -1,4 +1,4 @@
-## API project
+## 2020 Sem1 API project
 
 This API perform read/write to a database based on client request.
 1. The API will first generate the following databases for a theoretical orgainisation:
